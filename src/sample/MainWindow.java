@@ -9,23 +9,5 @@ import java.util.ResourceBundle;
 
 public class MainWindow {
 
-    DoubleProperty x;
 
-    public double getX()
-    {
-        return x.get();
-    }
-
-    public void setX(double value)
-    {
-        x.set(value);
-    }
-
-    public DoubleProperty xProperty() {
-        return x;
-    }
-
-    public MainWindow(){
-        x = new SimpleDoubleProperty(10.0);
-    }
 }

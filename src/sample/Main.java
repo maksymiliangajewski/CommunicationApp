@@ -12,11 +12,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
-        primaryStage.setTitle("Hello World");
-        Pane mainWindowPane = new Pane(root);
-        Scene mainWindowScene = new Scene(mainWindowPane);
-        mainWindowPane.prefHeightProperty().bind(mainWindowScene.heightProperty());
-        mainWindowPane.prefWidthProperty().bind(mainWindowScene.widthProperty());
+        Scene mainWindowScene = new Scene(root);
         primaryStage.setScene(mainWindowScene);
         primaryStage.show();
     }
