@@ -19,7 +19,7 @@
                      <children>
                         <HBox prefHeight="0.0" prefWidth="119.0">
                            <children>
-                              <Label prefHeight="17.0" prefWidth="161.0" text="Imie i nazwisko">
+                              <Label prefHeight="27.0" prefWidth="147.0" text="Imie i nazwisko">
                                  <contextMenu>
                                     <ContextMenu>
                                       <items>
@@ -30,8 +30,8 @@
                               </Label>
                            </children>
                         </HBox>
-                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="147.0" text="Search for help" />
                         <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="147.0" text="Wydarzenia" />
+                        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="147.0" text="Search for help" />
                      </children>
                   </VBox>
                </children>
