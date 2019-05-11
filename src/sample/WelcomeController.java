@@ -18,26 +18,33 @@ public class WelcomeController implements Initializable {
     @FXML
     ComboBox<String> UniversityComboBox;
     @FXML
-    CheckComboBox<String> LearnCheckComboBox;
+    CheckComboBox<Obszar> LearnCheckComboBox;
     @FXML
     TextField UsernameTextField;
+    Client client = new Client();
+    ArrayList<String> universities;
+    ArrayList<Obszar> learnAreas;
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        UniversityComboBox.getItems().setAll("PJATK", "PW");
-        LearnCheckComboBox.getItems().setAll("Hello", "Hello2");
+        universities=client.getUczelnie();
+        learnAreas=client.getObszary();
+        UniversityComboBox.getItems().setAll(universities);
+        LearnCheckComboBox.getItems().setAll(learnAreas);
     }
     public void LogInButtonClicked()
     {
         //System.out.println(UsernameTextField.getText());
         //System.out.println(UniversityComboBox.getSelectionModel().getSelectedItem());
         //System.out.println(LearnCheckComboBox.getItems().get(LearnCheckComboBox.getCheckModel().getCheckedIndices().get(0)));
-        ArrayList<String> selectedLearnAreas = new ArrayList<>();
+
+        ArrayList<Obszar> selectedLearnAreas = new ArrayList<>();
         for(int i=0 ;i<LearnCheckComboBox.getCheckModel().getCheckedIndices().size(); i++)
         {
             selectedLearnAreas.add(LearnCheckComboBox.getItems().get(LearnCheckComboBox.getCheckModel().getCheckedIndices().get(i)));
         }
         String username = UsernameTextField.getText();
         String university = UniversityComboBox.getSelectionModel().getSelectedItem();
+
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
@@ -45,7 +52,7 @@ public class WelcomeController implements Initializable {
             stage.setScene(new Scene(root1));
             stage.show();
             MainWindowController mainWindowController = fxmlLoader.getController();
-            mainWindowController.setup(username);
+            mainWindowController.setup(client, username, university, selectedLearnAreas,universities,  learnAreas);
         } catch(Exception e) {
             e.printStackTrace();
         }

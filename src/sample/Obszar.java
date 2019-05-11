@@ -7,4 +7,8 @@ public class Obszar {
     }
     int id;
     String name;
+    public String toString()
+    {
+        return name;
+    }
 }

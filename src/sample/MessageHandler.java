@@ -72,26 +72,32 @@ public class MessageHandler {
             response += "HELP" + ":" + ((ConnectionWithClient)key.attachment()).nazwa + ":" + ((ConnectionWithClient)key.attachment()).id + ":" + splittedMessage[3];
 
             List<Obszar> obszary = new ArrayList<>();
-            for(String obszarId : splittedMessage[2].split(",")){
-                for(Obszar obszar : server.obszary) {
-                    if(obszar.id == Integer.parseInt(obszarId)) {
-                        obszary.add(obszar);
+            if(!splittedMessage[2].equals("dowolnie")) {
+                for (String obszarId : splittedMessage[2].split(",")) {
+                    for (Obszar obszar : server.obszary) {
+                        if (obszar.id == Integer.parseInt(obszarId)) {
+                            obszary.add(obszar);
+                        }
                     }
                 }
             }
-
             for(SelectionKey clientKey : server.selector.keys()){
-                if(!key.equals(clientKey)){
+                if(!key.equals(clientKey) && clientKey.attachment()!=null && !clientKey.channel().equals(server.serverSocketChannel)){
                     boolean send = true;
-                    for(Obszar obszarKlienta :((ConnectionWithClient)key.attachment()).obszary){
-                        if(!obszary.contains(obszarKlienta)){
+                    for(Obszar obszarKlienta : obszary){
+                        if(!((ConnectionWithClient)key.attachment()).obszary.contains(obszarKlienta)){
+                            send = false;
+                        }
+                    }
+                    if(!((ConnectionWithClient)key.attachment()).uczelnia.equals("dowolnie")){
+                        if(!((ConnectionWithClient)key.attachment()).uczelnia.equals(splittedMessage[1])){
                             send = false;
                         }
                     }
                     if(send) {
                         ByteBuffer bb = server.charset.encode(response);
                         try {
-                            ((SocketChannel)key.channel()).write(bb);
+                            ((SocketChannel)clientKey.channel()).write(bb);
                         } catch (IOException e) {
                             key.cancel();
                         }
@@ -105,10 +111,14 @@ public class MessageHandler {
     public void response(String message, SelectionKey key) {
         System.out.println("handling RESRPONSE request");
         String[] splittedMessage  = message.split(":");
-        String response = splittedMessage[0] + splittedMessage[1] + splittedMessage[3];
+        String response = splittedMessage[0] + ":" + splittedMessage[1] + ":" + splittedMessage[3];
         ByteBuffer bb = server.charset.encode(response);
         try {
-            ((SocketChannel)key.channel()).write(bb);
+            for(SelectionKey rightKey : server.selector.keys()) {
+                if(rightKey.attachment()!=null && !rightKey.channel().equals(server.serverSocketChannel) && ((ConnectionWithClient)rightKey.attachment()).id == Integer.parseInt(splittedMessage[2])) {
+                    ((SocketChannel) rightKey.channel()).write(bb);
+                }
+            }
         } catch (IOException e) {
             key.cancel();
         }

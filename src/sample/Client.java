@@ -28,7 +28,7 @@ public class Client {
         }
     }
 
-    public void connect(String nazwa, String uczelnia, ArrayList<Obszar> obszary){
+    public void connect(String nazwa, String uczelnia, ArrayList<Obszar> obszary, MainWindowController mainWindowController){
         this.nazwa = nazwa;
         this.uczelnia = uczelnia;
         this.obszary = obszary;
@@ -37,9 +37,6 @@ public class Client {
         for(int i = 0; i < this.obszary.size(); ++i)
             obszaryId += this.obszary.get(i).id + ",";
 
-        String wiadomosc = nazwa + ":" + uczelnia + ":" + obszaryId;
-        System.out.println("connect:Polaczenie do servera " + wiadomosc);
-        sendMessage(wiadomosc);
 
         Thread listenToMessages = new Thread(){
             public void run(){
@@ -51,10 +48,15 @@ public class Client {
                         String res = charset.decode(bb).toString();
                         System.out.println("read:Otrzymalem wiadomosc " + res);
                         String[] splittedRes = res.split(":");
-                        if(splittedRes[0].equals("HELP"))
-                            displayHelp(splittedRes);
-                        if(splittedRes[0].equals("RESPONSE"))
-                            displayResponse(splittedRes);
+
+                        if(splittedRes[0].equals("HELP")) {
+                         //   displayHelp(splittedRes);
+                            mainWindowController.giveHelpRequest(splittedRes[3], splittedRes[1], Integer.parseInt(splittedRes[2]));
+                        }
+                        if(splittedRes[0].equals("RESPONSE")) {
+                            //displayResponse(splittedRes);
+                            mainWindowController.giveResponse(splittedRes[2], splittedRes[1]);
+                        }
                         bb.clear();
                     } catch (IOException e) {
                         System.out.println(e);
@@ -63,6 +65,9 @@ public class Client {
             }
         };
         listenToMessages.start();
+        String wiadomosc ="CONNECT:" +  nazwa + ":" + uczelnia + ":" + obszaryId;
+        System.out.println("connect:Polaczenie do servera " + wiadomosc);
+        sendMessage(wiadomosc);
     }
 
     public ArrayList<String> getUczelnie(){
@@ -81,13 +86,14 @@ public class Client {
         }
         String[] splitted = receivedMsg.split(",");
         ArrayList<String> res = new ArrayList<>(Arrays.asList(splitted));
+
         return res;
     }
 
     public ArrayList<Obszar> getObszary(){
         //to wywoluje GUI
         ArrayList<Obszar> res = new ArrayList<Obszar>();
-        String wiadomosc = "GET:UCZELNIE";
+        String wiadomosc = "GET:OBSZARY";
         sendMessage(wiadomosc);
         String receivedMsg = "";
         try {
@@ -100,9 +106,11 @@ public class Client {
             e.printStackTrace();
         }
         String[] splitted1 = receivedMsg.split(",");
+
         for(int i = 0; i < splitted1.length; ++i) {
+            System.out.println(splitted1[i]);
             String toSplit = splitted1[i];
-            String[] splitted2 = toSplit.split("|");
+            String[] splitted2 = toSplit.split("\\|");
             int id = Integer.parseInt(splitted2[0]);
             Obszar o = new Obszar(id, splitted2[1]);
             res.add(o);
