@@ -24,12 +24,14 @@ public class WelcomeController implements Initializable {
     Client client = new Client();
     ArrayList<String> universities;
     ArrayList<Obszar> learnAreas;
+    static Stage st;
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         universities=client.getUczelnie();
         learnAreas=client.getObszary();
         UniversityComboBox.getItems().setAll(universities);
         LearnCheckComboBox.getItems().setAll(learnAreas);
+
     }
     public void LogInButtonClicked()
     {
@@ -46,6 +48,7 @@ public class WelcomeController implements Initializable {
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(root1));
+            st=stage;
             stage.show();
             MainWindowController mainWindowController = fxmlLoader.getController();
             mainWindowController.setup(client, username, university, selectedLearnAreas,universities,  learnAreas);

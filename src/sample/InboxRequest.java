@@ -3,10 +3,7 @@ package sample;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.util.Callback;
 
 import java.util.Optional;
@@ -40,16 +37,25 @@ public class InboxRequest extends AnchorPane {
         });
         okButton.setPrefSize(60,18);
         rejectButton.setPrefSize(60,18);
-        okButton.setStyle("-fx-background-color: rgba(255, 255, 255, 1)");
-        rejectButton.setStyle("-fx-background-color: rgba(255, 255, 255, 1)");
+        okButton.setStyle("-fx-background-color: rgba(255, 255, 255, 1); -fx-text-fill: green");
+        rejectButton.setStyle("-fx-background-color: rgba(255, 255, 255, 1); -fx-text-fill: red");
+        label.setStyle("-fx-font-weight: bold;");
+        label.setWrapText(true);
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setHgrow(Priority.ALWAYS);
+        col1.setPercentWidth(40);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setHgrow(Priority.ALWAYS);
+        col2.setPercentWidth(60);
+        gridPane.getColumnConstraints().addAll(col1,col2);
         gridPane.setPrefSize(this.getPrefWidth(),this.getPrefHeight());
-        gridPane.add(label, 2,1,2,1);
-        gridPane.add(descriptionLabel,2,2,2,1);
-        gridPane.add(okButton, 1,1);
-        gridPane.add(rejectButton, 1,2);
+        gridPane.add(label, 1,1,2,1);
+        gridPane.add(descriptionLabel,1,2,1,2);
+        gridPane.add(okButton, 0,1);
+        gridPane.add(rejectButton, 0,2);
         gridPane.setStyle("-fx-background-color: white; -fx-background-insets: 10px; -fx-padding: 10px;\n" +
                 "    -fx-border-insets: 10px;");
-        this.setStyle("-fx-background-color: white;");
+        this.setStyle("-fx-background-color: white;-fx-background-radius: 10px;");
         this.setHeight(30);
         this.getChildren().add(gridPane);
     }
@@ -61,16 +67,27 @@ public class InboxRequest extends AnchorPane {
         this.InboxVbox=InboxVbox;
         this.setPrefSize(200, 100);
         GridPane gridPane = new GridPane();
+        Button rejectButton = new Button("Dissmis");
+        rejectButton.setStyle("-fx-background-color: rgba(255, 255, 255, 1); -fx-text-fill: red");
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setHgrow(Priority.ALWAYS);
+        col1.setPercentWidth(40);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setHgrow(Priority.ALWAYS);
+        col2.setPercentWidth(60);
         Label label = new Label(this.username);
+        label.setStyle("-fx-font-weight: bold;");
         Label descriptionLabel = new Label(this.description);
         Label abbr = new Label(this.username.substring(0,1));
-        Button rejectButton = new Button("Reject");
         rejectButton.setOnAction((e)->{
             InboxVbox.getChildren().remove(this);
         });
-        gridPane.add(label, 1,1);
-        gridPane.add(descriptionLabel,1,2);
+        gridPane.add(label, 0,1);
+        gridPane.add(descriptionLabel,0,2);
         gridPane.add(rejectButton, 2,3);
+        gridPane.setStyle("-fx-background-color: white; -fx-background-insets: 10px; -fx-padding: 10px;\n" +
+                "    -fx-border-insets: 10px;");
+        this.setStyle("-fx-background-color: white;-fx-background-radius: 10px;");
         this.getChildren().add(gridPane);
     }
 
@@ -88,7 +105,9 @@ public class InboxRequest extends AnchorPane {
         dialog.getDialogPane().setContent(gridPane);
         ButtonType buttonTypeOk = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
-
+        dialog.setOnCloseRequest(e->{
+            dialog.close();
+        });
         dialog.setResultConverter(new Callback<ButtonType, String>() {
             @Override
             public String call(ButtonType param) {

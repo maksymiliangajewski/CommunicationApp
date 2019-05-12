@@ -27,12 +27,12 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label alignment="CENTER" text="MS-DOS" GridPane.columnSpan="2" GridPane.halignment="CENTER">
+            <Label alignment="CENTER" text="SSD" GridPane.columnSpan="2" GridPane.halignment="CENTER">
                <font>
                   <Font name="Kokonor Regular" size="48.0" />
                </font>
             </Label>
-            <Label text="Zaloguj się lub Zarejestruj w Międzyuczelnianym Systemie Wsparcia i Doszkalania" textAlignment="CENTER" wrapText="true" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+            <Label text="Zaloguj się w Studenckim Systemie Doszkalania" textAlignment="CENTER" wrapText="true" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                <font>
                   <Font size="24.0" />
                </font></Label>

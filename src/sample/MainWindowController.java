@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -24,6 +25,7 @@ public class MainWindowController {
     ArrayList<Obszar> areas;
     public void setup(Client client, String nazwa, String uczelnia, ArrayList<Obszar> obszary, ArrayList<String> universities, ArrayList<Obszar> areas)
     {
+        WelcomeController.st.setResizable(false);
         this.client=client;
         this.universities=universities;
         this.areas=areas;
@@ -36,6 +38,7 @@ public class MainWindowController {
     {
         Platform.runLater(()->{
             InboxRequest inboxRequest = new InboxRequest(description, id, username, InboxVbox, client);
+            InboxVbox.setSpacing(10);
             InboxVbox.getChildren().add(inboxRequest);
         });
 
@@ -44,9 +47,9 @@ public class MainWindowController {
     {
         Platform.runLater(()->{
             InboxRequest inboxRequest = new InboxRequest(description, username, ResponseVbox, client);
+            InboxVbox.setSpacing(10);
             ResponseVbox.getChildren().add(inboxRequest);
         });
-
     }
     public void displayDialogPane()
     {
@@ -62,21 +65,28 @@ public class MainWindowController {
         ComboBox<Obszar> learnAreaComboBox = new ComboBox<>();
         learnAreaComboBox.getItems().setAll(areas);
         TextField descriptionTextBox = new TextField();
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setPercentWidth(30);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setPercentWidth(60);
+        ColumnConstraints col3 = new ColumnConstraints();
+        col3.setPercentWidth(10);
         GridPane gridPane = new GridPane();
-        gridPane.add(university,1,1);
-        gridPane.add(universityComboBox, 2, 1);
-        gridPane.add(description, 1,2);
-        gridPane.add(descriptionTextBox, 2,2);
-        gridPane.add(learnArea, 1,3);
-        gridPane.add(learnAreaComboBox, 2,3);
-        dialog.getDialogPane().setContent(gridPane);
+        gridPane.getColumnConstraints().addAll(col1,col2, col3);
+        gridPane.add(university,0,0);
+        gridPane.add(universityComboBox, 1, 0,2,1);
+        gridPane.add(description, 0,1);
+        gridPane.add(descriptionTextBox, 1,1,2,1);
+        gridPane.add(learnArea, 0,2);
+        gridPane.add(learnAreaComboBox, 1,2,2,1);
         ButtonType buttonTypeOk = new ButtonType("Okay", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().add(buttonTypeOk);
+        dialog.getDialogPane().setContent(gridPane);
 
         dialog.setResultConverter(new Callback<ButtonType, HelpRequest>() {
             @Override
             public HelpRequest call(ButtonType param) {
-                if (param.equals(buttonTypeOk)) {
+                if (param!=null && param.equals(buttonTypeOk)) {
 
                     return new HelpRequest(universityComboBox.getSelectionModel().getSelectedItem(), descriptionTextBox.getText(), learnAreaComboBox.getSelectionModel().getSelectedItem());
                 }
