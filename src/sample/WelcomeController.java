@@ -33,10 +33,6 @@ public class WelcomeController implements Initializable {
     }
     public void LogInButtonClicked()
     {
-        //System.out.println(UsernameTextField.getText());
-        //System.out.println(UniversityComboBox.getSelectionModel().getSelectedItem());
-        //System.out.println(LearnCheckComboBox.getItems().get(LearnCheckComboBox.getCheckModel().getCheckedIndices().get(0)));
-
         ArrayList<Obszar> selectedLearnAreas = new ArrayList<>();
         for(int i=0 ;i<LearnCheckComboBox.getCheckModel().getCheckedIndices().size(); i++)
         {
@@ -53,6 +49,8 @@ public class WelcomeController implements Initializable {
             stage.show();
             MainWindowController mainWindowController = fxmlLoader.getController();
             mainWindowController.setup(client, username, university, selectedLearnAreas,universities,  learnAreas);
+            Stage closeStage = (Stage)UsernameTextField.getScene().getWindow();
+            closeStage.close();
         } catch(Exception e) {
             e.printStackTrace();
         }

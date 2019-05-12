@@ -1,7 +1,10 @@
 package sample;
 
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -25,7 +28,7 @@ public class InboxRequest extends AnchorPane {
         GridPane gridPane = new GridPane();
         Label label = new Label(this.username);
         Label descriptionLabel = new Label(this.description);
-        Label abbr = new Label(this.username.substring(0,1));
+      //  Label abbr = new Label(this.username.substring(0,1));
         Button okButton = new Button("OK");
         Button rejectButton = new Button("Reject");
         rejectButton.setOnAction((e)->{
@@ -35,10 +38,19 @@ public class InboxRequest extends AnchorPane {
             displayDialogPane();
             InboxVbox.getChildren().remove(this);
         });
-        gridPane.add(label, 1,1);
-        gridPane.add(descriptionLabel,1,2);
-        gridPane.add(okButton, 1,3);
-        gridPane.add(rejectButton, 2,3);
+        okButton.setPrefSize(60,18);
+        rejectButton.setPrefSize(60,18);
+        okButton.setStyle("-fx-background-color: rgba(255, 255, 255, 1)");
+        rejectButton.setStyle("-fx-background-color: rgba(255, 255, 255, 1)");
+        gridPane.setPrefSize(this.getPrefWidth(),this.getPrefHeight());
+        gridPane.add(label, 2,1,2,1);
+        gridPane.add(descriptionLabel,2,2,2,1);
+        gridPane.add(okButton, 1,1);
+        gridPane.add(rejectButton, 1,2);
+        gridPane.setStyle("-fx-background-color: white; -fx-background-insets: 10px; -fx-padding: 10px;\n" +
+                "    -fx-border-insets: 10px;");
+        this.setStyle("-fx-background-color: white;");
+        this.setHeight(30);
         this.getChildren().add(gridPane);
     }
     public InboxRequest(String description, String username, VBox InboxVbox, Client client)
